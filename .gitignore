@@ -36,8 +36,7 @@ bld/
 
 # Docker
 .dockerignore
-Dockerfile
-# (Wait, we actually WANT Dockerfile in Git, so don't ignore it)
+# Dockerfile is intentionally NOT ignored so it can be used for deployment
 
 # Others
 .DS_Store
