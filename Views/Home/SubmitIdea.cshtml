@@ -1,0 +1,43 @@
+@model AprobadorIdeas.Models.SubmitIdeaViewModel
+@{
+    ViewData["Title"] = "Postular Idea";
+}
+
+<div class="glass-panel mx-auto" style="max-width: 600px;">
+    <h2 class="text-center mb-4">Postular Nueva Idea</h2>
+    <p class="text-center mb-4" style="color: var(--text-secondary); font-size: 0.9rem;">
+        Por seguridad, ingrese las credenciales de su equipo para comprobar su identidad.
+    </p>
+
+    <form asp-action="SubmitIdea" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-4"></div>
+
+        <div class="flex gap-4">
+            <div class="form-group" style="flex: 1;">
+                <label class="form-label">Nombre del Equipo</label>
+                <input asp-for="TeamName" class="form-control" />
+                <span asp-validation-for="TeamName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" style="flex: 1;">
+                <label class="form-label">Password del Equipo</label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Texto de la Idea</label>
+            <textarea asp-for="IdeaText" class="form-control" rows="5" placeholder="Describa su grandiosa idea..."></textarea>
+            <span asp-validation-for="IdeaText" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn-primary mt-4" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+            Postular Idea
+        </button>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Aprobador de Ideas</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <nav class="navbar">
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">🚀 Ideas Creativas</a>
+        <ul class="navbar-nav">
+            <li><a class="nav-link" asp-controller="Home" asp-action="Register">Registrar Equipo</a></li>
+            <li><a class="nav-link" asp-controller="Home" asp-action="SubmitIdea">Postular Idea</a></li>
+            <li><a class="nav-link" asp-controller="Admin" asp-action="Dashboard">Profesor</a></li>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <li><a class="nav-link" asp-controller="Admin" asp-action="Logout">Salir</a></li>
+            }
+        </ul>
+    </nav>
+
+    <div class="container">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,54 @@
+@model AprobadorIdeas.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "Registro de Equipo";
+}
+
+<div class="glass-panel mx-auto" style="max-width: 500px;">
+    <h2 class="text-center mb-4">Registro de Equipo</h2>
+
+    <form asp-action="Register" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-4"></div>
+
+        <div class="form-group">
+            <label class="form-label">Nombre del Equipo</label>
+            <input asp-for="TeamName" class="form-control" placeholder="Ej. Los innovadores" />
+            <span asp-validation-for="TeamName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Contraseña</label>
+            <input asp-for="Password" type="password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Comprobación de contraseña</label>
+            <input asp-for="ConfirmPassword" type="password" class="form-control" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Número de integrantes (Max 2)</label>
+            <input asp-for="MembersCount" type="number" class="form-control" min="1" max="2" />
+            <span asp-validation-for="MembersCount" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Nombre del Integrante 1</label>
+            <input asp-for="Member1Name" class="form-control" />
+            <span asp-validation-for="Member1Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Nombre del Integrante 2 (Opcional)</label>
+            <input asp-for="Member2Name" class="form-control" />
+            <span asp-validation-for="Member2Name" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn-primary mt-4">Confirmar Registro</button>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

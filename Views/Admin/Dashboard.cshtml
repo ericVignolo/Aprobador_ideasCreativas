@@ -1,0 +1,114 @@
+@model IEnumerable<AprobadorIdeas.Models.Idea>
+@{
+    ViewData["Title"] = "Dashboard Profesor";
+}
+
+<div class="container">
+    <div class="flex justify-between items-center mb-4">
+        <h2>Panel de Revisión de Ideas</h2>
+        <a asp-action="CompareIdeas" class="btn-primary" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); text-decoration: none; padding: 0.5rem 1rem;">
+            🔍 Analizar Similitudes
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <div style="display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); mt-4">
+        @foreach (var idea in Model)
+        {
+            string borderColor = "#f59e0b"; // Pendiente
+            string badgeBg = "rgba(245, 158, 11, 0.2)";
+            string badgeColor = "#fbbf24";
+            string statusText = "Pendiente";
+
+            if (idea.Status == AprobadorIdeas.Models.IdeaStatus.Approved)
+            {
+                borderColor = "var(--success)";
+                badgeBg = "rgba(16, 185, 129, 0.2)";
+                badgeColor = "#34d399";
+                statusText = "Aprobada";
+            }
+            else if (idea.Status == AprobadorIdeas.Models.IdeaStatus.Rejected)
+            {
+                borderColor = "var(--danger)";
+                badgeBg = "rgba(239, 68, 68, 0.2)";
+                badgeColor = "#f87171";
+                statusText = "Desaprobada";
+            }
+            else if (idea.Status == AprobadorIdeas.Models.IdeaStatus.OnTrack)
+            {
+                borderColor = "#3b82f6";
+                badgeBg = "rgba(59, 130, 246, 0.2)";
+                badgeColor = "#60a5fa";
+                statusText = "Encaminada";
+            }
+
+            <div class="glass-panel idea-card" style="padding: 1.5rem; border-left: 4px solid @borderColor;">
+                
+                <div class="idea-header">
+                    <div>
+                        <strong style="font-size: 1.25rem;">Equipo: @idea.Team?.Name</strong>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <p style="white-space: pre-wrap; font-size: 0.95rem; color: var(--text-primary); line-height: 1.5;">@idea.Description</p>
+                </div>
+                
+                <div class="idea-meta mb-4">
+                    <span>@idea.SubmissionDateTime.ToString("dd/MM/yyyy HH:mm")</span>
+                    <span style="background: @badgeBg; color: @badgeColor; font-weight: 600;">@statusText</span>
+                </div>
+
+                <form asp-action="ReviewIdea" method="post" class="mt-4 pt-4" style="border-top: 1px solid var(--glass-border);">
+                    <input type="hidden" name="id" value="@idea.Id" />
+                    
+                    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" name="isCreative" value="true" @(idea.IsCreative ? "checked" : "") />
+                            <span>Es creativa</span>
+                            <input type="hidden" name="isCreative" value="false" />
+                        </label>
+                        
+                        <label class="custom-checkbox">
+                            <input type="checkbox" name="isWellProposed" value="true" @(idea.IsWellProposed ? "checked" : "") />
+                            <span>Está bien planteada</span>
+                            <input type="hidden" name="isWellProposed" value="false" />
+                        </label>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="form-label">Nota o Feedback (Opcional, visible para los alumnos)</label>
+                        <textarea name="professorFeedback" class="form-control" rows="3" placeholder="Ej: Me gusta la idea, pero intenten enfocarla más en...">@idea.ProfessorFeedback</textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button type="submit" name="status" value="Approved" class="btn-primary" style="flex: 1; padding: 0.75rem 0.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                            Aprobar
+                        </button>
+                        
+                        <button type="submit" name="status" value="OnTrack" class="btn-primary" style="flex: 1; padding: 0.75rem 0.5rem; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+                            Encaminar
+                        </button>
+
+                        <button type="submit" name="status" value="Rejected" class="btn-primary" style="flex: 1; padding: 0.75rem 0.5rem; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                            Desaprobar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        }
+
+        @if (!Model.Any())
+        {
+            <div class="glass-panel text-center" style="grid-column: 1 / -1;">
+                <h3 style="color: var(--text-secondary);">No hay ideas postuladas aún.</h3>
+            </div>
+        }
+    </div>
+</div>

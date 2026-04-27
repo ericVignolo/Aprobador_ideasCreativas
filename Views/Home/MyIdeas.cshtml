@@ -1,0 +1,70 @@
+@model IEnumerable<AprobadorIdeas.Models.Idea>
+@{
+    ViewData["Title"] = "Mis Postulaciones";
+}
+
+<div class="container">
+    <div class="flex justify-between items-center mb-4">
+        <h2>Ideas del Equipo: <span style="color: var(--accent-hover);">@ViewBag.TeamName</span></h2>
+        <a asp-action="Index" class="btn-secondary">Volver al Inicio</a>
+    </div>
+
+    <div style="display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); mt-4">
+        @foreach (var idea in Model)
+        {
+            string borderColor = "#f59e0b"; // Pending/OnTrack default orange/yellow
+            string badgeBg = "rgba(245, 158, 11, 0.2)";
+            string badgeColor = "#fbbf24";
+            string statusText = "Pendiente";
+
+            if (idea.Status == AprobadorIdeas.Models.IdeaStatus.Approved)
+            {
+                borderColor = "var(--success)";
+                badgeBg = "rgba(16, 185, 129, 0.2)";
+                badgeColor = "#34d399";
+                statusText = "Aprobada";
+            }
+            else if (idea.Status == AprobadorIdeas.Models.IdeaStatus.Rejected)
+            {
+                borderColor = "var(--danger)";
+                badgeBg = "rgba(239, 68, 68, 0.2)";
+                badgeColor = "#f87171";
+                statusText = "Desaprobada";
+            }
+            else if (idea.Status == AprobadorIdeas.Models.IdeaStatus.OnTrack)
+            {
+                borderColor = "#3b82f6";
+                badgeBg = "rgba(59, 130, 246, 0.2)";
+                badgeColor = "#60a5fa";
+                statusText = "Encaminada";
+            }
+
+            <div class="glass-panel" style="padding: 1.5rem; border-left: 4px solid @borderColor;">
+                
+                <div class="idea-meta mb-4">
+                    <span>@idea.SubmissionDateTime.ToString("dd/MM/yyyy HH:mm")</span>
+                    <span style="background: @badgeBg; color: @badgeColor; float: right; font-weight: 600;">@statusText</span>
+                </div>
+
+                <div class="mb-4">
+                    <p style="white-space: pre-wrap; font-size: 0.95rem; color: var(--text-primary); line-height: 1.5;">@idea.Description</p>
+                </div>
+                
+                @if (!string.IsNullOrEmpty(idea.ProfessorFeedback))
+                {
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--glass-border);">
+                        <strong style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 0.5rem;">Feedback del Profesor:</strong>
+                        <p style="font-size: 0.9rem; color: #fbbf24; font-style: italic; margin: 0;">"@idea.ProfessorFeedback"</p>
+                    </div>
+                }
+            </div>
+        }
+
+        @if (!Model.Any())
+        {
+            <div class="glass-panel text-center" style="grid-column: 1 / -1;">
+                <h3 style="color: var(--text-secondary);">No han postulado ninguna idea aún.</h3>
+            </div>
+        }
+    </div>
+</div>

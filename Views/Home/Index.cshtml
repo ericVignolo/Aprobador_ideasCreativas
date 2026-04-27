@@ -1,0 +1,61 @@
+@model IEnumerable<AprobadorIdeas.Models.Idea>
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="text-center" style="margin-bottom: 3rem;">
+    <h1 class="mb-4">Bienvenido al Aprobador de Ideas</h1>
+    <p class="mb-4" style="color: var(--text-secondary); max-width: 600px; margin: 0 auto; line-height: 1.6;">
+        La plataforma donde los equipos de estudiantes pueden postular sus visiones y el profesor
+        tiene el control total para revisarlas, darles feedback y aprobarlas con el estándar requerido.
+    </p>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success mt-4 mx-auto" style="max-width: 500px;">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <div class="flex justify-center gap-4 mt-4" style="margin-top: 3rem;">
+        <a asp-action="Register" class="btn-primary" style="width: auto; text-decoration: none;">Registrar mi Equipo</a>
+        <a asp-action="SubmitIdea" class="btn-secondary" style="width: auto;">Postular Idea</a>
+        <a asp-action="CheckMyIdeas" class="btn-secondary" style="width: auto; background: rgba(99, 102, 241, 0.2);">Ver Mis Ideas</a>
+    </div>
+</div>
+
+<hr style="border-color: var(--glass-border); margin: 3rem 0; opacity: 0.5;" />
+
+<h2 class="text-center mb-4">🌟 Vitrina de Ideas Aprobadas</h2>
+<p class="text-center mb-4" style="color: var(--text-secondary);">
+    Inspírate con las ideas que ya han logrado el sello de aprobación del profesor.
+</p>
+
+<div style="display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));">
+    @foreach (var idea in Model)
+    {
+        <div class="glass-panel" style="padding: 1.5rem; border-left: 4px solid var(--success);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                <strong style="color: var(--accent-hover);">Equipo: @idea.Team?.Name</strong>
+                <span style="font-size: 0.8rem; color: var(--text-secondary);">@idea.SubmissionDateTime.ToString("dd/MM/yyyy")</span>
+            </div>
+            
+            <p style="white-space: pre-wrap; font-size: 0.95rem; color: var(--text-primary); line-height: 1.5;">@idea.Description</p>
+            
+            @if (!string.IsNullOrEmpty(idea.ProfessorFeedback))
+            {
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--glass-border);">
+                    <strong style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 0.5rem;">Comentario del Profesor:</strong>
+                    <p style="font-size: 0.9rem; color: #fbbf24; font-style: italic; margin: 0;">"@idea.ProfessorFeedback"</p>
+                </div>
+            }
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="text-center" style="grid-column: 1 / -1; margin-top: 2rem;">
+            <p style="color: var(--text-secondary);">Aún no hay ideas aprobadas en la vitrina. ¡Sé el primero en postular!</p>
+        </div>
+    }
+</div>

@@ -1,0 +1,35 @@
+@model AprobadorIdeas.Models.CheckIdeasViewModel
+@{
+    ViewData["Title"] = "Revisar Mis Ideas";
+}
+
+<div class="glass-panel mx-auto" style="max-width: 500px;">
+    <h2 class="text-center mb-4">Revisar Mis Ideas</h2>
+    <p class="text-center mb-4" style="color: var(--text-secondary); font-size: 0.9rem;">
+        Ingrese las credenciales de su equipo para ver de forma privada el estado de sus postulaciones.
+    </p>
+
+    <form asp-action="CheckMyIdeas" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-4"></div>
+
+        <div class="form-group">
+            <label class="form-label">Nombre del Equipo</label>
+            <input asp-for="TeamName" class="form-control" />
+            <span asp-validation-for="TeamName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Password del Equipo</label>
+            <input asp-for="Password" type="password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn-primary mt-4" style="background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);">
+            Consultar Mis Ideas
+        </button>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
